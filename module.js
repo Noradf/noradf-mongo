@@ -5,25 +5,25 @@ var session = require('express-session'),
     mongoose = require('mongoose');
 
 module.exports = function (app, config, router) {
-    mongoose.set('debug', (config.mongo && config.mongo.debug) || false);
+    mongoose.set('debug', (config.mongo && config.mongo.debug) || true);
 
     router.session(session({
-        secret: config.secret || 'MYSECRETSESSIONTOKEN',
+        secret: (config.mongo && config.mongo.sessionToken) || 'MYSECRETSESSIONTOKEN',
         store: new mongoStore({
             mongooseConnection: mongoose.connection
         }),
         cookie: {
-            path: '/',
+            path: (config.router && config.router.session && config.router.session.cookiePath) || '/',
             httpOnly: true,
             secure: false,
             maxAge: null
         },
-        name: 'connect.sid',
+        name: (config.router && config.router.session && config.router.session.cookieName) || 'connect.sid',
         resave: true,
         saveUninitialized: true
     }));
 
-    var mongoUri = process.env.MONGO_URI || (config.mongo && config.mongo.uri);
+    var mongoUri = process.env.MONGO_URI || (config.mongo && config.mongo.uri) || 'localhost/test';
     if (!mongoUri) {
         throw new Error('Mongo Uri is not provided');
     }

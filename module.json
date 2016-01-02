@@ -5,5 +5,18 @@
     "connect-mongo": "^0.8.2",
     "express-session": "^1.12.1",
     "mongoose": "^4.3.1"
+  },
+  "config": {
+    "mongo": {
+      "uri": "localhost/test",
+      "debug": true,
+      "sessionToken": "MYSECRETSESSIONTOKEN"
+    },
+    "router": {
+      "session": {
+        "cookiePath": "/",
+        "cookieName": "connect.sid"
+      }
+    }
   }
 }
